@@ -1,0 +1,234 @@
+html, body {
+  font-family: "Roboto","Helvetica", "Arial", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+html {
+  color: rgba(0,0,0, 0.87);
+  line-height: 1.4;
+}
+
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+.dialog_bg {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+}
+
+@media screen and (min-width: 1024px) and (orientation: landscape)
+{
+  .messenger-box-app {
+    width: 520px;
+    margin: 4% auto;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  }
+}
+
+@media screen and (display-mode: standalone)
+{
+  .messenger-box-app {
+    width: 100%;
+    margin: 0;
+    box-shadow: none;
+  }
+}
+
+.messenger-content-app {
+  height: calc(100% - 40px);
+}
+
+::selection {
+  background: #b3d4fc;
+  text-shadow: none;
+}
+
+.content_bg {
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: white; 
+}
+
+.watermark {
+  position: fixed; bottom: 0px; right: 0px;
+}
+
+.watermark > img {
+  width: 120px; 
+  margin: 40px;
+}
+
+/* Inspiration : https://codepen.io/sevilayha/pen/IdGKH */
+/* form starting stylings ------------------------------- */
+.mdx-textfield { 
+  position:relative; 
+  width: 100%; 
+}
+.mdx-textfield__input {
+  color: rgba(0,0,0,0.6);
+  font-size:16px;
+  margin: 0;
+  padding: 4px 0;
+  background: none;
+  display: block;
+  width: 100%;
+  border: none;
+  font-family: "Roboto","Helvetica", "Arial", sans-serif;
+  border-bottom: 1px solid rgba(0,0,0, 0.12);
+}
+.mdx-textfield__input:focus { outline:none; }
+
+/* LABEL ======================================= */
+.mdx-textfield__label_floating {
+  color:rgba(0,0,0, 0.26);; 
+  font-size:16px;
+  font-weight:normal;
+  position:absolute;
+  pointer-events:none;
+  left:5px;
+  top:10px;
+  transition:0.2s ease all; 
+  -moz-transition:0.2s ease all; 
+  -webkit-transition:0.2s ease all;
+}
+
+.mdx-textfield__label {
+  bottom: 0;
+  color: rgba(0,0,0, 0.26);
+  font-size: 16px;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  position: absolute;
+  display: block;
+  top: 4px;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: left;
+}
+
+/* active state */
+.mdx-textfield__input:focus ~ .floatingLabel, .mdx-textfield__input:valid ~ .floatingLabel	{
+  top:-18px;
+  font-size:14px;
+  color:#552682;
+  display: block;
+}
+
+/*.mdx-textfield__input:focus ~ Label, .mdx-textfield__input:valid ~ .Label	{
+  display: none;
+}*/
+
+/* BOTTOM BARS ================================= */
+.mdx-textfield__bar { 
+  position:relative; 
+  display:block; 
+  width:100%; 
+}
+
+.mdx-textfield__bar:before, .mdx-textfield__bar:after {
+  content:'';
+  height:2px; 
+  width:0;
+  bottom:1px; 
+  position:absolute;
+  background: #552682; 
+  transition:0.2s ease all; 
+  -moz-transition:0.2s ease all; 
+  -webkit-transition:0.2s ease all;
+}
+.mdx-textfield__bar:before {
+  left:50%;
+}
+.mdx-textfield__bar:after {
+  right:50%; 
+}
+
+/* active state */
+.mdx-textfield__input:focus ~ .mdx-textfield__bar:before, .mdx-textfield__input:focus ~ .mdx-textfield__bar:after {
+  width:50%;
+}
+
+/* HIGHLIGHTER ================================== */
+.mdx-textfield__highlight {
+  position:absolute;
+  height:60%; 
+  width:100%; 
+  top:25%; 
+  left:0;
+  pointer-events:none;
+  opacity:0.5;
+}
+
+/* active state */
+.mdx-textfield__input:focus ~ .mdx-textfield__highlight {
+  -webkit-animation:mdx-textfield__inputHighlighter 0.3s ease;
+  -moz-animation:mdx-textfield__inputHighlighter 0.3s ease;
+  animation:mdx-textfield__inputHighlighter 0.3s ease;
+}
+
+/* ANIMATIONS ================ */
+@-webkit-keyframes mdx-textfield__inputHighlighter {
+	from { background: #552682; }
+  to 	{ width:0; background:transparent; }
+}
+@-moz-keyframes mdx-textfield__inputHighlighter {
+	from { background:#552682; }
+  to 	{ width:0; background:transparent; }
+}
+@keyframes mdx-textfield__inputHighlighter {
+	from { background:#552682; }
+  to 	{ width:0; background:transparent; }
+}
+
+@media screen and (max-width: 1024px) {
+  .messenger-content-app {
+    height: calc(100% - 50px);
+  }
+  .mdx-textfield__label_floating {
+    font-size:28px;
+  }
+  .mdx-textfield__input:focus ~ .floatingLabel, .mdx-textfield__input:valid ~ .floatingLabel	{
+    font-size:24px;
+  }
+  .mdx-textfield__label {
+    font-size: 28px;
+  }
+  .mdx-textfield__input {
+    font-size:28px;
+  }
+  html, body {
+    font-size: 24px;
+  }
+}
+
+@media screen and (display-mode: standalone) {
+  .messenger-content-app {
+    height: calc(100% - 60px);
+  }
+  .mdx-textfield__label_floating {
+    font-size:34px;
+  }
+  .mdx-textfield__input:focus ~ .floatingLabel, .mdx-textfield__input:valid ~ .floatingLabel	{
+    font-size:34px;
+  }
+  .mdx-textfield__label {
+    font-size: 34px;
+  }
+  .mdx-textfield__input {
+    font-size:34px;
+  }
+  html, body {
+    font-size: 24px;
+  }
+}

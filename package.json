@@ -1,0 +1,36 @@
+{
+  "name": "opla-webchat",
+  "version": "0.1.0",
+  "description": "The Opla Webchat",
+  "main": "index.js",
+  "repository": {
+    "url": "https://github.com/Opla/webchat",
+    "type": "github"
+  },
+  "author": "mik <mik@opla.ai>",
+  "license": "MIT",
+  "scripts": {
+    "clean-dist": "rm -r -f dist && mkdir dist && mkdir dist/js",
+    "copy": "yarn clean-dist && cp -r -f src/images dist && cp -f server/*.php dist && cp -r -f src/css dist",
+    "build:dev": "yarn copy && uglifyjs src/js/components/*.js src/js/services/*.js src/js/*.js -o dist/js/app.js",
+    "compile": "yarn copy && uglifyjs src/js/components/*.js src/js/services/*.js src/js/*.js -c -m reserved=['opla'] -o dist/js/app.js",
+    "start:prod": "yarn build:prod && php -S localhost:8085 -t dist/",
+    "dev": "yarn build:dev && php -S localhost:8085 -t dist/",
+    "lint:dev": "eslint src --rule 'no-console: off'",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.0.3",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-es2016": "^6.24.1",
+    "chai": "^4.1.2",
+    "eslint": "^4.13.1",
+    "eslint-config-airbnb-base": "12.1.0",
+    "eslint-plugin-import": "2.8.0",
+    "mocha": "^4.0.1",
+    "nodemon": "^1.13.1"
+  }
+}

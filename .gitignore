@@ -1,0 +1,9 @@
+node_modules
+dist
+lib
+*.DS_Store
+config
+config.js
+server/config.php
+yarn.lock
+.yarnclean
