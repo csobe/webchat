@@ -1,4 +1,9 @@
-
+/**
+ * Copyright (c) 2015-present, CWB SAS
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
 
 .opla-icon {
   background-image: url("https://bots.opla.ai/images/opla-icon.svg");
@@ -41,6 +46,7 @@
   display: -ms-flexbox;
   display: flex;
   flex: 1;
+  box-ordinal-group: 3;
   -webkit-box-ordinal-group: 3;
   -webkit-order: 2;
   -ms-flex-order: 2;
