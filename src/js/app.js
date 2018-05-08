@@ -232,8 +232,8 @@ const launchServices = async () => {
   app.user = await app.api.getUserProfile();
   // console.log("app.user=", app.user);
   const botName = "bot_" + app.bot.name + "_" + app.bot.id;
-  console.log("botName", botName);
-  console.log("username", app.user.username);
+  // console.log("botName", botName);
+  // console.log("username", app.user.username);
   const participants = {};
   participants[botName] = { dest: "from", icon: "opla" }; 
   participants[app.user.username] = { dest: "you", icon: "default" };

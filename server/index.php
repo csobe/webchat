@@ -79,7 +79,6 @@ function init()
     $url = API_URL."/params/".$name."/botParams";
     $response = fetch($url);
     $params = json_decode($response['body'], true);
-    // echo $params;
     $app = $params['application'];
     $policies = $app['policies'];
     // TODO get App
