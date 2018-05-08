@@ -62,5 +62,5 @@ agree to abide by its terms. See [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md) file.
 
 ## License
 
-opla-front is released under the GPL v2.0+ License. See the bundled
+opla-webchat is released under the MIT License. See the bundled
 [LICENSE](LICENSE) file for details.
