@@ -15,7 +15,7 @@ const localized = {
   en: { "Your message": "Your message", "Welcome message": "Welcome fellow user! your virtual assistant, will help you." }, 
   fr: { "Your message": "Votre message", "Welcome message": "Bienvenue cher utilisateur, votre assistant virtuel est là pour vous aider. "  } };
 
-let baseUrl = "https://bots.opla.ai";
+let baseUrl = "https://bot.opla.ai";
 
 const getLocalizedText = (text) => {
   let l = "en";
@@ -120,7 +120,10 @@ const buildPath = (path) => {
 }
 
 const loadCSS = (filename, rel = "stylesheet", type = "text/css") => {
-  const path = buildPath(baseUrl + filename);
+  let path = filename;
+  if (filename.indexOf("http") !== 0) {
+    path = buildPath(baseUrl + filename);
+  }
   const css = document.createElement("link");
   css.setAttribute("rel", rel);
   css.setAttribute("type", type);
