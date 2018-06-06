@@ -7,7 +7,7 @@
 
 
 /**
- * Main application Opla messenger client
+ * Main application Opla Webchat client
  */
 const app = { };
 
@@ -24,12 +24,73 @@ const getLocalizedText = (text) => {
   }
   let ltext = localized[l][text] || text; 
   return ltext;
-}
+};
 
-const initServices = () => {
+const parseUrl = (url) => {
+  const a = document.createElement("a");
+  a.href = url;
+  return {
+    source: url,
+    protocol: a.protocol.replace(":", ""),
+    host: a.hostname,
+    port: a.port,
+    pathname: a.pathname
+  };
+};
+
+const initServices = async () => {
+  let host = opla.config.host;
+  let port = opla.config.port;
+  let protocol = opla.config.protocol;
+  let pathname = opla.config.pathname || "";
+  let secure = opla.config.secure;
+  console.log("config", opla.config);
+  if (opla.config.url) {
+    const url = parseUrl(opla.config.url);
+    console.log("url", url);
+    host = url.host;
+    port = url.port;
+    pathname = url.pathname;
+    opla.config.host = host;
+    opla.config.port = port;
+    opla.config.pathname = pathname;
+    protocol = url.protocol;
+    if (protocol === "https") {
+      secure = true;
+    } else {
+      secure = false;
+    }
+    opla.config.secure = secure;
+  }
+  if (!host) {
+    throw new Error("No valid API url");
+  }
+  if (!protocol) {
+    protocol = opla.config.secure ? "https" : "http";
+  }
+  const uri = host + (port ? ":" + port : "");
+  if (opla.config.token) {
+    try {
+      const response = await fetch(protocol + "://" + uri + pathname + "/bots/params/" + opla.config.token);
+      console.log("data=", response);
+      const params = response.data;
+      opla.config = { 
+        botId: params.botId, 
+        appId: params.application.id, 
+        appSecret: params.application.secret, 
+        host, 
+        port,
+        anonymous_secret: params.application.policies["anonymous_secret"],
+        secure, 
+        language: opla.config.language 
+      };
+    } catch (e) {
+      console.log("Can't fetch bot's params : ", e.message);
+      throw new Error(e.message);
+    }
+
+  }
   // console.log("opla.config=", opla.config);
-  const uri = opla.config.host + ":" + opla.config.port;
-  const secure = opla.config.secure;
   if (!opla.authConfig) {
     const clientId = opla.config.appId;
     const clientSecret = opla.config.appSecret;
@@ -46,7 +107,7 @@ const initServices = () => {
   app.authService = new AuthService(opla.authConfig);
   app.webService = new WebService(opla.apiConfig, app.authService);
   app.api = new Api(app.webService);
-}
+};
 
 const sendSandboxMessage = (body) => {
   // BUG not from mik
@@ -61,7 +122,7 @@ const sendSandboxMessage = (body) => {
   }
   // app.messenger.appendMessage(message);
   return false;
-}
+};
 
 const sendMessage = (body) => {
   if (opla.config.sandbox) {
@@ -79,18 +140,18 @@ const sendMessage = (body) => {
   }
   // app.messenger.appendMessage(message);
   return false;
-}
+};
 
 const appendBeforeScript = (element) => {
   const scripts = document.getElementsByTagName("script");
   document.body.insertBefore(element, scripts[0]);
-}
+};
 
 const initMessenger = () => {
   app.messenger = new MessengerContainer(sendMessage);
   const container = app.messenger.render(opla.theme);
   appendBeforeScript(container);
-}
+};
 
 const initScreen = () => {
   let el = null;
@@ -109,6 +170,18 @@ const initScreen = () => {
   el.appendChild(img);
   appendBeforeScript(el);
   initMessenger();
+};
+
+const displayError = (error) => {
+  app.messenger.hide();
+  if (!app.errorBox) {
+    const container = document.createElement("div");
+    container.className = "error-box";
+    appendBeforeScript(container);
+    app.errorBox = container;
+  }
+  app.errorBox.setAttribute("style", "display: block;");
+  app.errorBox.innerHTML = error || "error";
 }
 
 const buildPath = (path) => {
@@ -117,7 +190,7 @@ const buildPath = (path) => {
   }
   const prefix = opla.config.path || "./";
   return prefix + path;
-}
+};
 
 const loadCSS = (filename, rel = "stylesheet", type = "text/css") => {
   let path = filename;
@@ -129,7 +202,7 @@ const loadCSS = (filename, rel = "stylesheet", type = "text/css") => {
   css.setAttribute("type", type);
   css.setAttribute("href", path);
   document.getElementsByTagName("head")[0].appendChild(css);
-}
+};
 
 const initStyle = () => {
   if (opla.theme && opla.theme.fonts) {
@@ -181,7 +254,7 @@ const initStyle = () => {
       css.insertRule("button { " + item.style + " }", 0);
     }
   }
-}
+};
 
 const authenticate = async () => {
   const api = app.api;
@@ -204,7 +277,7 @@ const authenticate = async () => {
   } else {
     throw new Error("can't authenticate");
   }
-}
+};
 
 const proceedMessages = (name, action, data) => {
   if (action === "newMessages") {
@@ -222,7 +295,7 @@ const proceedMessages = (name, action, data) => {
       }
     }
   }
-}
+};
 
 const launchServices = async () => {
   const botId = opla.config.botId;
@@ -248,22 +321,25 @@ const launchServices = async () => {
     app.conversationId = app.bot.conversationId;
     app.api.subscribeConversationMessages(app.conversationId, proceedMessages);
   }
-}
+};
 
-const start = () => {
+const start = async () => {
+  if (opla.config.baseUrl) {
+    baseUrl = opla.config.baseUrl;
+  }
   initStyle();
-  initServices();
   initScreen();
-
-  authenticate().then((attributes) => {
-    // console.log("authenticated", attributes);
-    launchServices().then();
-  }).catch((error) => {
-    console.log("can't authenticate", error);
-  })
-}
+  try {
+    await initServices();
+    await authenticate();
+    await launchServices();
+  } catch (error) {
+    console.log(error);
+    displayError(error.message);
+  }
+};
 
 window.addEventListener("load", () => {
-  console.log("Opla.ai messenger client");
+  console.log("Opla.ai webchat client");
   start();
 });

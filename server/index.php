@@ -75,29 +75,39 @@ function fetch($url, $data = null)
 
 function init()
 {
-    $name = $_GET["b"];
-    $url = API_URL."/params/".$name."/botParams";
-    $response = fetch($url);
-    $params = json_decode($response['body'], true);
-    $app = $params['application'];
-    $policies = $app['policies'];
+    if (isset($_GET["b"])) {
+        $name = $_GET["b"];
+    } else {
+        $name = "xxx"; // TODO handle error
+    }
+
+    // $url = API_URL."/params/".$name."/botParams";
+    // $response = fetch($url);
+    // $params = json_decode($response['body'], true);
+    // $app = $params['application'];
+    // $policies = $app['policies'];
     // TODO get App
     // TODO call getBot
-    $parts = parse_url($url);
-    $secure = "false";
-    if (SECURE_SERVER) {
-        $secure = "true";
-    }
+    // $parts = parse_url($url);
+    // $secure = "false";
+
+    // botId: "'.$params['botId'].'", 
+    // appId: "'.$app['id'].'", 
+    // appSecret: "'.$app['secret'].'", 
+    // host: "'.$parts['host'].'", port: "'.$parts['port'].'",
+    // anonymous_secret: "'.$policies['anonymous_secret'].'",
+    // secure: '.$secure.',    if (SECURE_SERVER) {
+    //    $secure = "true";
+    // }
     echo '<script>opla = { 
     config: { 
-      botId: "'.$params['botId'].'", 
-      appId: "'.$app['id'].'", 
-      appSecret: "'.$app['secret'].'", 
-      host: "'.$parts['host'].'", port: "'.$parts['port'].'",
-      anonymous_secret: "'.$policies['anonymous_secret'].'",
-      secure: '.$secure.', 
+      token: "'.$name.'",
+      url: "'.API_URL.'",
+      baseUrl: "'.BASE_URL.'",
       language: "fr" 
-    }};</script>';
+    }};
+    (function(o,p,l,a,i){a=p.createElement(l),i=p.getElementsByTagName(l)[0];a.async=1;a.src=o;i.parentNode.insertBefore(a,i)})(opla.config.baseUrl+"/js/app.js",document,"script");
+    </script>';
 }
 
 function getTitle()
@@ -111,7 +121,7 @@ function configureBot()
   // WIP set configuration
   init();
 
-  echo '<script type="application/javascript" src="js/app.js"></script>';
+  // echo '<script type="application/javascript" src="js/app.js"></script>';
 }
 
 

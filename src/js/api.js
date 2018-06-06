@@ -119,6 +119,10 @@ class Api {
     return await this.webService.get("me");
   }
 
+  async getBotParams(token) {
+    return await this.webService.get("bots/" + token + "/params");
+  }
+
   async getBot(botId) {
     return await this.webService.get("bots/" + botId);
   }
