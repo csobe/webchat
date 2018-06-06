@@ -74,6 +74,16 @@ body {
   margin: 40px;
 }
 
+.error-box {
+  padding: 8px;
+  display: block;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  color: red;
+  background: lightgray;
+}
+
 /* Inspiration : https://codepen.io/sevilayha/pen/IdGKH */
 /* form starting stylings ------------------------------- */
 .mdx-textfield { 

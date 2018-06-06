@@ -14,6 +14,12 @@ class MessengerContainer {
     
   }
 
+  hide() {
+    if (this.container) {
+      this.container.setAttribute("style", "display: none;");
+    }
+  }
+
   setParticipants(participants) {
     this.participants = participants;
   }
@@ -178,6 +184,7 @@ class MessengerContainer {
     
     container.appendChild(messengerBox);
 
+    this.container = container;
     return container;
   }
 }

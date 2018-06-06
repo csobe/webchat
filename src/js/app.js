@@ -34,6 +34,7 @@ const parseUrl = (url) => {
     protocol: a.protocol.replace(":", ""),
     host: a.hostname,
     port: a.port,
+    pathname: a.pathname
   };
 };
 
@@ -41,43 +42,53 @@ const initServices = async () => {
   let host = opla.config.host;
   let port = opla.config.port;
   let protocol = opla.config.protocol;
+  let pathname = opla.config.pathname || "";
   let secure = opla.config.secure;
+  console.log("config", opla.config);
   if (opla.config.url) {
     const url = parseUrl(opla.config.url);
+    console.log("url", url);
     host = url.host;
     port = url.port;
+    pathname = url.pathname;
+    opla.config.host = host;
+    opla.config.port = port;
+    opla.config.pathname = pathname;
     protocol = url.protocol;
     if (protocol === "https") {
       secure = true;
     } else {
       secure = false;
     }
+    opla.config.secure = secure;
   }
-  if (!opla.config.host) {
-    console.log("No valid API url");
-    return;
+  if (!host) {
+    throw new Error("No valid API url");
   }
   if (!protocol) {
     protocol = opla.config.secure ? "https" : "http";
   }
-  const uri = opla.config.host + (opla.config.port ? ":" + opla.config.port : "");
+  const uri = host + (port ? ":" + port : "");
   if (opla.config.token) {
     try {
-      const params = await ( await fetch(protocol + "://" + uri + "/bots/" + token + "/params")).json();
-    } catch {
-      console.log("Can't fetch bot's params");
-      return;
+      const response = await fetch(protocol + "://" + uri + pathname + "/bots/params/" + opla.config.token);
+      console.log("data=", response);
+      const params = response.data;
+      opla.config = { 
+        botId: params.botId, 
+        appId: params.application.id, 
+        appSecret: params.application.secret, 
+        host, 
+        port,
+        anonymous_secret: params.application.policies["anonymous_secret"],
+        secure, 
+        language: opla.config.language 
+      };
+    } catch (e) {
+      console.log("Can't fetch bot's params : ", e.message);
+      throw new Error(e.message);
     }
-    opla.config = { 
-      botId: params.botId, 
-      appId: params.application.id, 
-      appSecret: params.application.secret, 
-      host: opla.config.host, 
-      port: opla.config.port,
-      anonymous_secret: params.application.policies["anonymous_secret"],
-      secure, 
-      language: opla.config.language 
-    };
+
   }
   // console.log("opla.config=", opla.config);
   if (!opla.authConfig) {
@@ -160,6 +171,18 @@ const initScreen = () => {
   appendBeforeScript(el);
   initMessenger();
 };
+
+const displayError = (error) => {
+  app.messenger.hide();
+  if (!app.errorBox) {
+    const container = document.createElement("div");
+    container.className = "error-box";
+    appendBeforeScript(container);
+    app.errorBox = container;
+  }
+  app.errorBox.setAttribute("style", "display: block;");
+  app.errorBox.innerHTML = error || "error";
+}
 
 const buildPath = (path) => {
   if (path.indexOf("http") === 0) {
@@ -301,16 +324,19 @@ const launchServices = async () => {
 };
 
 const start = async () => {
+  if (opla.config.baseUrl) {
+    baseUrl = opla.config.baseUrl;
+  }
   initStyle();
-  await initServices();
   initScreen();
-
-  authenticate().then((attributes) => {
-    // console.log("authenticated", attributes);
-    launchServices().then();
-  }).catch((error) => {
-    console.log("can't authenticate", error);
-  })
+  try {
+    await initServices();
+    await authenticate();
+    await launchServices();
+  } catch (error) {
+    console.log(error);
+    displayError(error.message);
+  }
 };
 
 window.addEventListener("load", () => {
