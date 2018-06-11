@@ -11,7 +11,7 @@
   "license": "MIT",
   "scripts": {
     "clean-dist": "rm -r -f dist && mkdir dist && mkdir dist/js",
-    "copy": "yarn clean-dist && cp -r -f src/images dist && cp -f server/*.php dist && cp -r -f src/css dist",
+    "copy": "yarn clean-dist && cp -r -f src/images dist && cp -f server/*.php dist && cp -r -f src/css dist  && cp -r -f favicon.ico dist",
     "build:dev": "yarn copy && uglifyjs src/js/components/*.js src/js/services/*.js src/js/*.js -o dist/js/app.js",
     "compile": "yarn copy && uglifyjs src/js/components/*.js src/js/services/*.js src/js/*.js -c -m reserved=['opla'] -o dist/js/app.js",
     "start:prod": "yarn build:prod && php -S localhost:8085 -t dist/",
