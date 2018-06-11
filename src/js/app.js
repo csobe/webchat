@@ -44,10 +44,8 @@ const initServices = async () => {
   let protocol = opla.config.protocol;
   let pathname = opla.config.pathname || "";
   let secure = opla.config.secure;
-  console.log("config", opla.config);
   if (opla.config.url) {
     const url = parseUrl(opla.config.url);
-    console.log("url", url);
     host = url.host;
     port = url.port;
     pathname = url.pathname;
@@ -72,7 +70,6 @@ const initServices = async () => {
   if (opla.config.token) {
     try {
       const response = await fetch(protocol + "://" + uri + pathname + "/bots/params/" + opla.config.token);
-      console.log("data=", response);
       const params = response.data;
       opla.config = { 
         botId: params.botId, 
