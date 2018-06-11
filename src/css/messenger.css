@@ -6,7 +6,7 @@
  */
 
 .opla-icon {
-  background-image: url("https://bots.opla.ai/images/opla-icon.svg");
+  background-image: url("https://bot.opla.ai/images/opla-icon.svg");
   background-size: 30px;
   background-repeat: no-repeat;
   background-position-x: 13px;
@@ -136,7 +136,7 @@
   color: #000;
 }
 .message.from .circle-wrapper {
-  background-image: url("https://bots.opla.ai/images/opla-avatar.png");
+  background-image: url("https://bot.opla.ai/images/opla-avatar.png");
   background-size: 100%;
 }
 
@@ -161,7 +161,7 @@
 }
 
 .message.you .circle-wrapper {
-  background-image: url("https://bots.opla.ai/images/default-avatar.png");
+  background-image: url("https://bot.opla.ai/images/default-avatar.png");
   background-size: 100%;
 }
 
@@ -177,42 +177,42 @@
 }
 
 .message.you.default .circle-wrapper {
-  background-image: url("https://bots.opla.ai/images/default-avatar.png");
+  background-image: url("https://bot.opla.ai/images/default-avatar.png");
   background-size: 100%;
 }
 
 .message.you.bear .circle-wrapper {
-  background-image: url("https://bots.opla.ai/images/bear.png");
+  background-image: url("https://bot.opla.ai/images/bear.png");
   background-size: 100%;
 }
 
 .message.you.boar .circle-wrapper {
-  background-image: url("https://bots.opla.ai/images/boar.png");
+  background-image: url("https://bot.opla.ai/images/boar.png");
   background-size: 100%;
 }
 
 .message.you.deer .circle-wrapper {
-  background-image: url("https://bots.opla.ai/images/deer.png");
+  background-image: url("https://bot.opla.ai/images/deer.png");
   background-size: 100%;
 }
 
 .message.you.fox .circle-wrapper {
-  background-image: url("https://bots.opla.ai/images/fox.png");
+  background-image: url("https://bot.opla.ai/images/fox.png");
   background-size: 100%;
 }
 
 .message.you.giraffe .circle-wrapper {
-  background-image: url("https://bots.opla.ai/images/giraffe.png");
+  background-image: url("https://bot.opla.ai/images/giraffe.png");
   background-size: 100%;
 }
 
 .message.you.lion .circle-wrapper {
-  background-image: url("https://bots.opla.ai/images/lion.png");
+  background-image: url("https://bot.opla.ai/images/lion.png");
   background-size: 100%;
 }
 
 .message.you.racoon .circle-wrapper {
-  background-image: url("https://bots.opla.ai/images/racoon.png");
+  background-image: url("https://bot.opla.ai/images/racoon.png");
   background-size: 100%;
 }
 
