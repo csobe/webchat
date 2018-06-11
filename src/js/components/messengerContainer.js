@@ -108,6 +108,96 @@ class MessengerContainer {
     this.messengerContent.appendChild(messageRow);
   }
 
+  createMessage(message) {
+    const container = document.createElement("span");
+    if (message.body && message.body.indexOf("<b") >= 0) {
+      /* eslint-disable no-restricted-syntax */
+      const elements = [];
+      let tag = false;
+      let end = false;
+      let buf = "";
+      let element = {};
+      for (const ch of message.body) {
+        if (ch === "<") {
+          if (tag) {
+            element.value = buf;
+            buf = "";
+          } else {
+            if (buf.length > 0) {
+              elements.push({ value: buf, type: "text" });
+            }
+            buf = "";
+            tag = true;
+            end = false;
+            element = {};
+          }
+        } else if (ch === "/") {
+          end = true;
+        } else if (end && ch === ">") {
+          // <tag /> or </tag>
+          element.type = buf.trim();
+          elements.push(element);
+          element = {};
+          tag = false;
+          buf = "";
+        } else if (tag && ch === ">") {
+          element.type = buf.trim();
+          buf = "";
+        } else {
+          buf += ch;
+        }
+      }
+      if (buf.length > 0) {
+        elements.push({ value: buf, type: "text" });
+      }
+      elements.forEach((el, i) => {
+        // button and br
+        // TODO link / img
+        let element = null;
+        if (el.type === "button") {
+          element = document.createElement("button");
+          /*return (
+            <Button
+              key={i}
+              style={{ margin: " 0 8px" }}
+              dense
+              raised
+              onClick={(e) => {
+                e.preventDefault();
+                if (el.value) {
+                  this.props.onSendMessage(el.value);
+                }
+              }}
+            >
+              {el.value}
+            </Button>
+          );*/
+          element.innerHTML = el.value;
+          element.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (el.value.length > 0) {
+              let result = false;
+              if (this.onSendMessage) {
+                result = this.onSendMessage(el.value);
+              }
+            }
+          });
+        } else if (el.type === "br") {
+          // return <br key={i} />;
+          element = document.createElement("br");
+        } else {
+          element = document.createElement("span");
+          element.innerHTML = el.value;
+        }
+        container.appendChild(element);
+      });
+      /* eslint-enable no-restricted-syntax */
+    } else {
+      container.innerHTML = message.body;
+    }
+    return container;
+  }
+
   appendMessage(message){
     let messageRow = document.getElementById("msg_"+ message.id);
     if (messageRow) {
@@ -137,7 +227,7 @@ class MessengerContainer {
     child = document.createElement("div");
     child.className = "text-wrapper animated fadeIn";
     this.setSubStyle(child, theme.text);
-    child.innerHTML = message.body;
+    child.appendChild(this.createMessage(message));
     messageRow.appendChild(child);
     
     const children = this.messengerContent.children;
