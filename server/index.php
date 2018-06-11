@@ -81,33 +81,42 @@ function init()
         $name = "xxx"; // TODO handle error
     }
 
-    // $url = API_URL."/params/".$name."/botParams";
-    // $response = fetch($url);
-    // $params = json_decode($response['body'], true);
-    // $app = $params['application'];
-    // $policies = $app['policies'];
+    if (DIRECT_TOKEN === true) {
+        echo '<script>opla = { 
+            config: { 
+              token: "'.$name.'",
+              url: "'.API_URL.'",
+              baseUrl: "'.BASE_URL.'",
+              language: "fr" 
+            }};
+            (function(o,p,l,a,i){a=p.createElement(l),i=p.getElementsByTagName(l)[0];a.async=1;a.src=o;i.parentNode.insertBefore(a,i)})(opla.config.baseUrl+"/js/app.js",document,"script");
+            </script>';
+        return;
+    }
+    $url = API_URL."/params/".$name."/botParams";
+    $response = fetch($url);
+    $params = json_decode($response['body'], true);
+    $app = $params['application'];
+    $policies = $app['policies'];
     // TODO get App
     // TODO call getBot
-    // $parts = parse_url($url);
-    // $secure = "false";
+    $parts = parse_url($url);
+    $secure = "false";
+    if (SECURE_SERVER) {
+        $secure = "true";
+    }
 
-    // botId: "'.$params['botId'].'", 
-    // appId: "'.$app['id'].'", 
-    // appSecret: "'.$app['secret'].'", 
-    // host: "'.$parts['host'].'", port: "'.$parts['port'].'",
-    // anonymous_secret: "'.$policies['anonymous_secret'].'",
-    // secure: '.$secure.',    if (SECURE_SERVER) {
-    //    $secure = "true";
-    // }
     echo '<script>opla = { 
-    config: { 
-      token: "'.$name.'",
-      url: "'.API_URL.'",
-      baseUrl: "'.BASE_URL.'",
-      language: "fr" 
-    }};
-    (function(o,p,l,a,i){a=p.createElement(l),i=p.getElementsByTagName(l)[0];a.async=1;a.src=o;i.parentNode.insertBefore(a,i)})(opla.config.baseUrl+"/js/app.js",document,"script");
-    </script>';
+        config: { 
+            botId: "'.$params['botId'].'", 
+            appId: "'.$app['id'].'", 
+            appSecret: "'.$app['secret'].'", 
+            host: "'.$parts['host'].'", port: "'.$parts['port'].'",
+            anonymous_secret: "'.$policies['anonymous_secret'].'",
+            secure: '.$secure.',
+        }};
+        (function(o,p,l,a,i){a=p.createElement(l),i=p.getElementsByTagName(l)[0];a.async=1;a.src=o;i.parentNode.insertBefore(a,i)})("/js/app.js",document,"script");
+        </script>';
 }
 
 function getTitle()
@@ -120,8 +129,6 @@ function configureBot()
 {
   // WIP set configuration
   init();
-
-  // echo '<script type="application/javascript" src="js/app.js"></script>';
 }
 
 
