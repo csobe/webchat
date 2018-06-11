@@ -8,6 +8,9 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <link rel="icon" 
+      type="image/png" 
+      href="./images/opla-avatar.png" />
     <title><?php getTitle(); ?></title>
   </head>
   <body>
