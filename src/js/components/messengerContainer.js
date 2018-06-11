@@ -156,22 +156,7 @@ class MessengerContainer {
         let element = null;
         if (el.type === "button") {
           element = document.createElement("button");
-          /*return (
-            <Button
-              key={i}
-              style={{ margin: " 0 8px" }}
-              dense
-              raised
-              onClick={(e) => {
-                e.preventDefault();
-                if (el.value) {
-                  this.props.onSendMessage(el.value);
-                }
-              }}
-            >
-              {el.value}
-            </Button>
-          );*/
+          element.className = "message-button mdx-button";
           element.innerHTML = el.value;
           element.addEventListener("click", (e) => {
             e.preventDefault();
@@ -183,7 +168,6 @@ class MessengerContainer {
             }
           });
         } else if (el.type === "br") {
-          // return <br key={i} />;
           element = document.createElement("br");
         } else {
           element = document.createElement("span");
