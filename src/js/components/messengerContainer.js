@@ -203,7 +203,7 @@ class MessengerContainer {
     messageRow = document.createElement("div");
     messageRow.id = "msg_" + message.id;
     messageRow.className = "message " + dest + " " + icon;
-    messageRow.setAttribute("timestamp", message.timestamp);
+    messageRow.setAttribute("timestamp", message.created_time);
     let child = document.createElement("div");
     child.className = "circle-wrapper animated bounceIn";
     this.setSubStyle(child, theme.icon);
@@ -216,11 +216,12 @@ class MessengerContainer {
     
     const children = this.messengerContent.children;
     let b = true;
+    // console.log("message.created_time", message.timestamp, message.created_time);
     for (let i = 0; i < children.length; i++) {
       const c = children[i];
       if (c.hasAttribute("timestamp")) {
         const timestamp = parseInt(c.getAttribute("timestamp"));
-        if (message.timestamp < timestamp) {
+        if (message.created_time < timestamp) {
           this.messengerContent.insertBefore(messageRow, c);
           b = false;
           break;

@@ -106,9 +106,15 @@ const initServices = async () => {
   app.api = new Api(app.webService);
 };
 
+const getUsername = () => {
+  const { username } = app.authService.username;
+  console.log("username=", username);
+  return username;
+};
+
 const sendSandboxMessage = (body) => {
-  // BUG not from mik
-  const message = { from: "mik", body};
+  // console.log("send sandbox message", body);
+  const message = { from: getUsername(), body};
   // WIP send message
   if (body === "#reset") {      
     app.api.resetSandbox(app.bot.id);
@@ -122,6 +128,7 @@ const sendSandboxMessage = (body) => {
 };
 
 const sendMessage = (body) => {
+  // console.log("send message", body);
   if (opla.config.sandbox) {
     return sendSandboxMessage(body);
   }
