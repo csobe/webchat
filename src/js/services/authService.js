@@ -33,12 +33,20 @@ class AuthService {
     loadAttributes() {
       const storage = localStorage.getItem(this.client.clientId);
       if (storage) {
-        this.accessToken = storage["access_token"];    
-        this.expiresIn = storage["expires_in"];
-        this.scope = storage["scope"];
-        this.authorized = storage["authorized"]; 
-        this.username = storage["username"]; 
-        this.user_id = storage["user_id"]; 
+        try {
+          const data = JSON.parse(storage);
+          if (data && typeof data === "object") {
+            this.accessToken = data["access_token"];    
+            this.expiresIn = data["expires_in"];
+            this.scope = data["scope"];
+            this.authorized = data["authorized"]; 
+            this.username = data["username"]; 
+            this.user_id = data["user_id"]; 
+          }
+        } catch (e) {
+          console.log("Error", e);
+        }
+
       }
     }
   
@@ -51,7 +59,11 @@ class AuthService {
         username: this.username,
         user_id: this.userId, 
       };
-      localStorage.setItem(this.client.clientId, storage);
+      try {
+        localStorage.setItem(this.client.clientId, JSON.stringify(storage));
+      } catch (e) {
+        console.log("Error", e);
+      }
     }
   
     resetAccess() {
@@ -105,6 +117,7 @@ class AuthService {
         console.log("error ", error);
       }
 
+      console.log("requestAnonymousAccessToken", response);
       if (response.error) {
         this.resetAccess();
         throw new Error(error);
