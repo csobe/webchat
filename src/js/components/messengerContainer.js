@@ -216,7 +216,7 @@ class MessengerContainer {
     
     const children = this.messengerContent.children;
     let b = true;
-    console.log("message.created_time", message.timestamp, message.created_time);
+    // console.log("message.created_time", message.timestamp, message.created_time);
     for (let i = 0; i < children.length; i++) {
       const c = children[i];
       if (c.hasAttribute("timestamp")) {
